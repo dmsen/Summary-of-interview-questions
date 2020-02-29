@@ -1,0 +1,171 @@
+html  
+行内元素：大多数为苗素新标记 span a  br  sup sub   img  b select等   
+块元素 ：页面中以块形式出现，相对于前面的内容，会出现在新的一行
+例，导航菜单，列表，页脚，段落
+
+ 区别
+块元素：总是从新的一行开始，高度宽度可控，宽度默认100%，可包含块元素和行内元素
+行内元素：和其他元素在同一行，高度，宽度，边距都是不可控的，宽高就是内容的高度，不可改变，不能包含块元素
+
+同源策略：
+同源策略同domain(或ip),同端口,同协议视为同一个域,一个域内的脚本仅仅具有本域内的权限。是浏览器最核心也最基本的安全功能
+前端跨域方法
+1、JSONP
+2、document.domain等
+
+
+css
+盒子模型  hight width  padding margin border
+box-sizing：content-box  该值采用指定的元素大小，加上填充和边框宽度
+	border-box:指定的确切大小
+
+
+absolute 和reletive  定位区别
+absolute：相对于页面html元素或者最靠近的祖先元素边缘位置定位
+reletive：相对于其本来的位置移动-甚至将其与其他元素重合
+
+元素优先级 （到底渲染哪一个）即特异性
+根据其特异性程度来渲染：内联样式》id选择器》类，伪类选择器》元素选择器
+级联：之后的样式会覆盖先前的样式
+
+重排 和 重绘
+
+
+
+
+前端开发中几种居中方式
+1：最常用的
+margin: 0 auto; text-align: center（文字水平居中） 
+2：flex 布局
+ display: flex;
+ flex-direction: row;
+  justify-content: center;
+  align-items: center
+3.Grid布局
+.father_8 {
+    display: grid;
+}
+.son_8 {
+    align-self: center;
+    justify-self: center;
+}
+4.利用cal（）计算属性
+
+
+5通过position:absolute实现CSS水平居中。当然，要知道宽高属性，然后为子元素设置父子宽度差的一半的偏移
+
+
+vue 
+
+组件通信（六种方式）
+方法一、props/$emit
+父组件A通过props的方式向子组件B传递，子组件B to 父组件A 通过在 B 组件中 $emit方法, 父组件A 组件中 v-on 的方式实现。
+总结：父组件通过props向下传递数据给子组件。注：组件中的数据共有三种形式：data、props、computed
+
+方法二、$emit/$on
+这种方法通过一个空的Vue实例作为中央事件总线（事件中心），用它来触发事件和监听事件,巧妙而轻量地实现了任何组件间的通信，包括父子、兄弟、跨级。当我们的项目比较大时，可以选择更好的状态管理解决方案vuex。
+
+方法三、vuex
+Vuex原理
+Vuex实现了一个单向数据流，在全局拥有一个State存放数据，当组件要更改State中的数据时，必须通过Mutation进行，Mutation同时提供了订阅者模式供外部插件调用获取State数据的更新。而当所有异步操作(常见于调用后端接口异步获取更新数据)或批量的同步操作需要走Action，但Action也是无法直接修改State的，还是需要通过Mutation来修改State的数据。最后，根据State的变化，渲染到视图上。
+
+Vuex与localStorage
+vuex 是 vue 的状态管理器，存储的数据是响应式的。但是并不会保存起来，刷新之后就回到了初始状态，具体做法应该在vuex里数据改变的时候把数据拷贝一份保存到localStorage里面，刷新之后，如果localStorage里有保存的数据，取出来再替换store里的state。
+这里需要注意的是：由于vuex里，我们保存的状态，都是数组，而localStorage只支持字符串，所以需要用JSON转换：
+JSON.stringify(state.subscribeList);   // array -> string
+JSON.parse(window.localStorage.getItem("subscribeList"));    // string -> 
+
+方法四、$attrs/$listeners
+
+1. 简介
+多级组件嵌套需要传递数据时，通常使用的方法是通过vuex。但如果仅仅是传递数据，而不做中间处理，使用 vuex 处理，未免有点大材小用。为此Vue2.4 版本提供了另一种方法----$attrs/$listeners
+
+$attrs：包含了父作用域中不被 prop 所识别 (且获取) 的特性绑定 (class 和 style 除外)。当一个组件没有声明任何 prop 时，这里会包含所有父作用域的绑定 (class 和 style 除外)，并且可以通过 v-bind="$attrs" 传入内部组件。通常配合 interitAttrs 选项一起使用。
+
+$listeners：包含了父作用域中的 (不含 .native 修饰器的) v-on 事件监听器。它可以通过 v-on="$listeners" 传入内部组件
+简单来说：$attrs与$listeners 是两个对象，$attrs 里存放的是父组件中绑定的非 Props 属性，$listeners里存放的是父组件中绑定的非原生事件。
+
+方法五、provide/inject
+
+1. 简介
+Vue2.2.0新增API,这对选项需要一起使用，以允许一个祖先组件向其所有子孙后代注入一个依赖，不论组件层次有多深，并在起上下游关系成立的时间里始终生效。一言而蔽之：祖先组件中通过provider来提供变量，然后在子孙组件中通过inject来注入变量。
+provide / inject API 主要解决了跨级组件间的通信问题，不过它的使用场景，主要是子组件获取上级组件的状态，跨级组件间建立了一种主动提供与依赖注入的关系。
+
+
+
+方法六、$parent / $children与 ref
+
+ref：如果在普通的 DOM 元素上使用，引用指向的就是 DOM 元素；如果用在子组件上，引用就指向组件实例
+
+$parent / $children：访问父 / 子实例
+需要注意的是：这两种都是直接得到组件实例，使用后可以直接调用组件的方法或访问数据。
+这两种方法的弊端是，无法在跨级或兄弟间通信。
+
+总结：
+常见使用场景可以分为三类：
+父子通信：
+父向子传递数据是通过 props，子向父是通过 events（$emit）；通过父链 / 子链也可以通信（$parent / $children）；ref 也可以访问组件实例；provide / inject API；$attrs/$listeners
+
+兄弟通信：
+Bus；Vuex
+
+跨级通信：
+Bus；Vuex；provide / inject API、$attrs/$listeners
+
+
+箭头函数的this 指向 
+
+箭头函数体内的this对象，就是定义该函数时所在的作用域指向的对象（即函数本身），而不是使用时所在的作用域指向的对象（例如VUE）。
+
+
+函数的作用域
+扩充函数赖以运行的作用域
+apply()和call()，call可以改变this指向
+add.call(reduce,3,1) == add(3,1)
+
+apply方法：
+语法：
+Function.apply(obj,args)
+obj：这个对象将代替Function类里this对象(就是定义函数代码块里面的this)
+args：这个是数组，它将作为参数传给Function（args-->arguments）,这个可以是数组也可以是 arguments
+
+v-for  设置key的作用：主要是为了高效的更新虚拟DOM，vue中的
+列表循环需加:key 唯一标识 ，来区别各个组件
+注意：key的取值必须是number 或 string，不能是对象，而且使用 v-for 循环的每一项的值，都要保证唯一性 。
+
+webpack 打包流程
+
+js
+
+什么是事件委托：利用冒泡的原理，把事件加到父级上，触发执行效果
+事件委托的作用：
+支持为同一个DOM元素注册多个同类型事件
+可将事件分成事件捕获和事件冒泡机制
+事件捕获
+当一个事件触发后,从Window对象触发,不断经过下级节点,直到目标节点。在事件到达目标节点之前的过程就是捕获阶段。所有经过的节点,都会触发对应的事件
+事件冒泡
+当事件到达目标节点后，会沿着捕获阶段的路线原路返回。同样，所有经过的节点,都会触发对应的事件
+
+
+查找 和删除元素
+document.querySelector()
+document.getElementById  ()
+增加 appendChild()
+removeChild()
+
+es6 的箭头函数和普通函数的区别
+
+两者最关键的区别就是this指向的区别，普通函数中的this指向函数被调用的对象，因此对于不同的调用者，this的值是不同的。而箭头函数中并没有自己的this（同时，箭头函数中也没有其他的局部变量，如this，argument，super等），所以箭头函数中的this是固定的，它指向定义该函数时所在的对象。
+
+怎么优化页面加载速度
+WEB性能优化常见的入手点包括以下几点：
+1、  HTTP请求
+2、  服务器响应速度
+3、  浏览器响应速度
+其中浏览器响应速度包括渲染速度和代码执行的速度。
+
+
+
+
+
+

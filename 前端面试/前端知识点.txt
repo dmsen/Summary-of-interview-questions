@@ -1,0 +1,5 @@
+promise对象  resolve  reject padding
+generaltor  生成器 被async/await 取代  理解
+js 主要包含 es bom dom 
+bom 主要属性 screen window navigator history location frames
+dom 主要属性 location forms anchors images links
