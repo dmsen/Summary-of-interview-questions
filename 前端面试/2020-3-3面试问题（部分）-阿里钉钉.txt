@@ -1,0 +1,33 @@
+js中array和call的区别
+
+webpack的流程及步骤
+
+代码完成实现：
+class Promise {
+
+}
+
+function delay(ms) {
+    return  Promise（）
+}
+
+
+delay(1000)
+  .then(() => console.log('A'))
+  .then(() => console.log('B'))
+  .then(() => delay(1000))
+  .then(() => console.log('C'))
+
+参考：https://blog.csdn.net/q121516340/article/details/100127549
+
+以下作为了解：
+const delay = (timeout) => {
+return new Promise(resolve => {
+setTimeout(resolve, timeout);
+});
+};
+
+delay(1000).then(_ => {
+console.log('executed');
+});
+
