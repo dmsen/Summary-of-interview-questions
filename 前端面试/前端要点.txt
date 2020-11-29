@@ -1,0 +1,166 @@
+是否改变原数组的常用方法（js）：
+改变原数组的：
+shift：将第一个元素删除并且返回删除元素，空即为undefined
+unshift：向数组开头添加元素，并返回新的长度
+pop：删除最后一个并返回删除的元素
+push：向数组末尾添加元素，并返回新的长度
+reverse：颠倒数组顺序
+sort：对数组排序
+splice:splice(start,length,item)删，增，替换数组元素，返回被删除数组，无删除则不返回
+
+不改变原数组的：
+concat：连接多个数组，返回新的数组
+join：将数组中所有元素以参数作为分隔符放入一个字符
+slice：slice(start,end)，返回选定元素
+map,filter,some,every等不改变原数组
+
+splice和slice的区别：
+splice(i,j,”a”) 删除，添加元素，splice() 方法与 slice() 方法的作用是不同的，splice() 方法会直接对数组进行修改。从i开始删j个(包括i),并将”a”插入到i处。
+slice(start,end) 从某个已有的数组返回选定的元素，从start位开始返回到end（包括start不包括end）如果是负数，表示从数组尾部进行计算（同样：包括start不包括end）,请注意，该方法并不会修改数组，而是返回一个子数组。
+
+如何判断数据类型？除了使用typeof instanceof之外怎么判断？
+function isArray(arr) {
+	return Object.prototype.toString.call(arr) === '[Object Array]'
+}
+
+
+深浅拷贝
+讨论JS对象深拷贝、浅拷贝的前提
+只有对象里嵌套对象的情况下,才会根据需求讨论,我们要深拷贝还是浅拷贝。
+深拷贝和浅拷贝的实现方式
+
+其实JQ里已经有$.extend()函数,实现就是深拷贝和浅拷贝的功能。有兴趣的小伙伴也可以看看源码。
+浅拷贝
+浅拷贝比较简单,就是用for in 循环赋值
+
+function shallowCopy(source, target = {}) {
+        var key;
+        for (key in source) {
+            if (source.hasOwnProperty(key)) {        // 意思就是__proto__上面的属性,我不拷贝
+                target[key] = source[key];
+            }
+        }
+        return target;
+    }
+
+深拷贝的实现
+
+深拷贝,就是遍历那个被拷贝的对象
+判断对象里每一项的数据类型
+如果不是对象类型,就直接赋值,如果是对象类型,就再次调用deepCopy,递归的去赋值。
+
+ function deepCopy(source, target = {}) {
+        var key;
+        for (key in source) {
+            if (source.hasOwnProperty(key)) {                         // 意思就是__proto__上面的属性,我不拷贝
+                if (typeof(source[key]) === "object") {               // 如果这一项是object类型,就递归调用deepCopy
+                    target[key] = Array.isArray(source[key]) ? [] : {};
+                    deepCopy(source[key], target[key]);
+                } else {                                            // 如果不是object类型,就直接赋值拷贝
+                    target[key] = source[key];
+                }
+            }
+        }
+        return target;
+    }
+
+以上的无论深、浅拷贝,都用了source.hasOwnProperty(key),意思是判断这一项是否是其自有属性,是的话才拷贝,不是就不拷贝。
+
+也就是说__proto__上面的属性,我不拷贝。这个其实你可以根据业务需求,来决定加上和这个条件
+
+(JQ的$.extend()是会连__proto__上的属性也拷贝下来的,但是是直接拷贝到对象上,而不是放到之前的__proto__上)
+
+上面的deepCopy方法有漏洞，没有考虑source一开始就是数组的情况
+
+下面是一个修改后版本
+function deepCopy( source ) {
+    let target = Array.isArray( source ) ? [] : {}
+    for ( var k in source ) {
+        if ( typeof source[ k ] === 'object' ) {
+            target[ k ] = deepCopy( source[ k ] )
+        } else {
+            target[ k ] = source[ k ]
+        }
+    }
+    return target
+}
+
+深拷贝的一行黑科技
+var adjustTableArr = JSON.parse(JSON.stringify(tableArr))
+缺陷：对象里的函数无法被拷贝,原型链里的属性无法被拷贝。这里就对业务没有影响,可以很方便的深拷贝。
+
+JQ里已经有$.extend()函数,实现就是深拷贝和浅拷贝的功能
+(JQ的$.extend()是会连__proto__上的属性也拷贝下来的,但是是直接拷贝到对象上,而不是放到之前的__proto__上)
+
+
+new一个对象的过程 
+当我们new一个构造器，主要有三步：
+• 创建一个空对象，将它的引用赋给 this，继承函数的原型。
+• 通过 this 将属性和方法添加至这个对象
+• 最后返回 this 指向的新对象，也就是实例（如果没有手动返回其他的对象
+
+实现一个简单的new方法
+/ 构造器函数
+let Parent = function (name, age) {
+    this.name = name;
+    this.age = age;
+};
+Parent.prototype.sayName = function () {
+    console.log(this.name);
+};
+
+//自己定义的new方法
+let newMethod = function (Parent, ...rest) {
+    // 1.以构造器的prototype属性为原型，创建新对象；
+    let child = Object.create(Parent.prototype);
+    // 2.将this和调用参数传给构造器执行
+    let result = Parent.apply(child, rest);
+    // 3.如果构造器没有手动返回对象，则返回第一步的对象
+    return typeof result  === 'object' ? result : child;
+};
+//创建实例，将构造函数Parent与形参作为参数传入
+const child = newMethod(Parent, 'echo', 26);
+child.sayName() //'echo';
+//最后检验，与使用new的效果相同
+child instanceof Parent//true
+child.hasOwnProperty('name')//true
+child.hasOwnProperty('age')//true
+child.hasOwnProperty('sayName')//false
+
+前端ES6了解吗
+最常用的ES6特性:let, const, class, extends, super, arrow functions, template string, destructuring, default, rest arguments
+
+声明变量：let, const
+var name = 'zach'
+while (true) {
+    var name = 'obama'
+    console.log(name)  //obama
+    break
+}
+console.log(name)  //obama
+ES5只有全局作用域和函数作用域，没有块级作用域，这带来很多不合理的场景。第一种场景就是你现在看到的内层变量覆盖外层变量。而let则实际上为JavaScript新增了块级作用域。用它所声明的变量，只在let命令所在的代码块内有效。
+
+不用ES6（即let），而用闭包如何解决这个问题。【学思维】
+
+var clickBoxs = document.querySelectorAll('.clickBox')
+for (var i = 0; i < clickBoxs.length; i++){
+    clickBoxs[i].onclick = function(){
+        console.log(i)
+    }
+}
+我们本来希望的是点击不同的clickBox，显示不同的i，但事实是无论我们点击哪个clickBox，输出的都是5。下面我们来看下，如何用闭包搞定它。
+
+function iteratorFactory(i){
+    var onclick = function(e){
+        console.log(i)
+    }
+    return onclick;
+}
+var clickBoxs = document.querySelectorAll('.clickBox')
+for (var i = 0; i < clickBoxs.length; i++){
+    clickBoxs[i].onclick = iteratorFactory(i)
+
+class, extends, super
+这三个特性涉及了ES5中最令人头疼的的几个部分：原型、构造函数，继承...
+有了ES6我们不再烦恼！
+ES6提供了更接近传统语言的写法，引入了Class（类）这个概念。新的class写法让对象原型的写法更加清晰、更像面向对象编程的语法，也更加通俗易懂。
