@@ -1,0 +1,23 @@
+答案：
+var num = parseInt(readline())
+var str = ''
+for(let i =2;i<=num;i++){
+    if(num%i===0){
+        num = num/i
+        str += i + ' '
+        i--
+    }
+}
+console.log(str)
+
+
+测试：
+var num = 180
+var str = ''
+for(let i =1;i<=num;i++){
+    if(num%i===0){
+        num = num/i
+        str += i + ' '
+    }
+}
+console.log(str) //1 2 3 5 6

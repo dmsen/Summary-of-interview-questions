@@ -1,0 +1,7 @@
+答案
+var num = parseFloat(readline())
+console.log(num.toFixed())
+
+测试：
+var num = 5.5
+console.log(num.toFixed())  //6

@@ -1,0 +1,16 @@
+答案：
+var str =readline()
+var str2=readline()
+console.log(str.split('').filter(i=>(i.toLowerCase()===str2.toLowerCase())).length)
+
+测试：
+var str ='ABCaD'
+var str2 = 'a'
+console.log(str.split('').filter(i=>(i.toLowerCase()===str2.toLowerCase())).length)
+
+涉及知识：
+js string
+toLowerCase()
+split
+array
+filter

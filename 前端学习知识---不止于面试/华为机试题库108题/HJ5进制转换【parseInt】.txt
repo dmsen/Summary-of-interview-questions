@@ -1,0 +1,9 @@
+var line = readline()
+while(line){
+    console.log(parseInt(line,16))
+    var line = readline()
+}
+
+测试：
+var line = '0xC460'
+console.log(parseInt(line,16))

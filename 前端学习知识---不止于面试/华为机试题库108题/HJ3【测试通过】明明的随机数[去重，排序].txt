@@ -1,0 +1,26 @@
+var numLine = parseInt(readline())
+var nums = []
+while(numLine--){
+	nums.push(parseInt(readline()))
+}
+
+let result = [...new Set(nums)].sort((a,b)=>a-b)
+console.log(result,typeof result)
+for(let i =0;i<result.length;i++){
+	console.log(result[i])
+}
+//for(let i=0;i<numLine;i++){
+    //nums.push(parseInt(readline()))
+//}
+//测试没问题 运行不通过
+测试 ：
+var numLine = 5
+var nums = [2,2,1,65,7]
+var result = [...new Set(nums)].sort((a,b)=>a-b)
+for(let i =0;i<result.length;i++){
+	console.log(result[i])
+}
+//console.log(result.length)
+console.log(result.foreach(i=>console.log(i)))
+涉及：
+去重，排序

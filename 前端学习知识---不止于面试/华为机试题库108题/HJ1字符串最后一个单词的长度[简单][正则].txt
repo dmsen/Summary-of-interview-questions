@@ -1,0 +1,11 @@
+答案：
+var line = readline()
+let reg = /\S([a-zA-Z]*)$/g
+//console.log( line.match(reg))  // ["nowcoder"]
+console.log( line.match(reg)[0].length)  //8
+测试：
+let str = 'hello nowcoder'
+let reg = /\S([a-zA-Z]*)$/g
+console.log(str.match(reg))  // ["nowcoder"]
+console.log(str.match(reg)[0].length)  //8
+

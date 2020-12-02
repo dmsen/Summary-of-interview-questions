@@ -1,0 +1,19 @@
+var line = readline()
+while(line){
+    var num = 8
+    for(let i =0,len=line.length;i<len/8;i++){
+	console.log(line.slice(i*num,(i+1)*num).padEnd(num,'0'))
+}
+    var line = readline()
+}
+
+测试：
+var line = 'anv'
+var num = 8
+for(let i =0,len=line.length;i<len/8;i++){
+	console.log(line.slice(i*num,(i+1)*num),typeof line.slice(i*num,(i+1)*num)) // anv  string
+	console.log(line.slice(i*num,(i+1)*num).padEnd(num,'0'))
+}
+涉及：
+string  padEnd
+slice()

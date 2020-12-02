@@ -1,0 +1,32 @@
+答案：
+var str = []
+var num = readline().split('').reverse().forEach(i=>{
+ if(str.indexOf(i) ===-1){
+ str.push(i)
+}
+})
+console.log(str.join(''))
+
+测试：
+var num ='9876673'.split('').reverse()
+console.log(num,typeof num)
+var str = []
+num.forEach(i=>{
+ if(str.indexOf(i) ===-1){
+ str.push(i)
+}
+})
+console.log(str.join(''))
+VM3293:2 (7) ["3", "7", "6", "6", "7", "8", "9"] "object"
+
+涉及
+string:
+split()
+indexOf
+array 
+reverse()
+join()
+
+
+
+
