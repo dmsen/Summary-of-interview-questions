@@ -1,0 +1,19 @@
+答案：
+let str  =readline()
+let reg = /([^\s][a-zA-Z]*)/g
+let result = ''
+str.match(reg).reverse().forEach(i=>result +=(i +' '))
+console.log(result)
+
+测试：
+let str  ='I am a boy'
+let reg = /([^\s][a-zA-Z]*)/g
+let result = ''
+str.match(reg).reverse().forEach(i=>result +=(i +' '))
+console.log(result)
+
+
+
+正则
+reverse()
+forEach

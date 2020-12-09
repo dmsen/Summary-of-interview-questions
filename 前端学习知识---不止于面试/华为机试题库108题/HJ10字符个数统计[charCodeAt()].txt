@@ -1,0 +1,8 @@
+答案：
+var str = readline().split('')
+var arr = [...new Set(str)]
+let result = 0
+arr.forEach(i=>{
+    result = 0<=i.charCodeAt()<=127? result+1:result
+})
+console.log(result)

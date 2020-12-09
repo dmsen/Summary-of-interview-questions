@@ -1,0 +1,5 @@
+答案：
+let num  = readline()
+console.log(num.split('').reverse().join(''))
+涉及：split  reverse join
+

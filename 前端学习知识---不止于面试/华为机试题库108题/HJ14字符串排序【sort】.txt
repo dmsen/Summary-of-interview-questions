@@ -1,0 +1,9 @@
+答案：
+let num = parseInt(readline())
+let arr = []
+while(num--){
+    arr.push(readline())
+}
+arr.sort().forEach(i=>console.log(i))
+
+sort方法
