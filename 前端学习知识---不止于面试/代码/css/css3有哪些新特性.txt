@@ -1,0 +1,38 @@
+新增各种 css 选择器
+----------------------------
+CSS3 边框
+圆角 border-radius
+阴影 box-shadow
+----------------------------
+多列布局
+column-count 属性指定了需要分割的列数。
+column-gap 属性指定了列与列间的间隙。
+column-rule-style 属性指定了列与列间的边框样式：
+column-rule-width 属性指定了两列的边框厚度:
+column-rule-color 属性指定了两列的边框颜色：
+column-span指定元素跨越多少列
+column-width 属性指定了列的宽度。
+----------------------------
+阴影和反射
+文字特效 text-shadow  文本阴影
+----------------------------
+线性渐变
+线性渐变（Linear Gradients）- 向下/向上/向左/向右/对角方向
+径向渐变（Radial Gradients）- 由它们的中心定义
+语法：
+background-image: linear-gradient(direction, color-stop1, color-stop2, ...);
+从左到右的线性渐变：
+#grad {
+  height: 200px;
+  background-image: linear-gradient(to right, red , yellow);
+}
+线性渐变 - 对角
+从左上角到右下角的线性渐变：
+#grad {
+  height: 200px;
+  background-image: linear-gradient(to bottom right, red, yellow);
+}
+
+----------------------------
+旋转 transform
+

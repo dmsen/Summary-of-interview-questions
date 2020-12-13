@@ -1,0 +1,68 @@
+// 等比例div。如4:3
+https://www.cnblogs.com/love314159/articles/9797191.html
+
+CSS实现长宽比例方案：
+html结构
+<div class="aspectration" data-ratio="16:9">
+    <div class="content"></div>
+</div>
+
+一：垂直方向的padding
+主要借助的原理是利用padding-top或者padding-bottom的百分比值，实现容器长宽比。
+在CSS中padding-top或padding-bottom的百分比值是根据容器的width来计算的。
+如此一来就很好的实现了容器的长宽比。采用这种方法，需要把容器的height设置为0。而容器内容的所有元素都需要采用position:absolute，不然子元素内容都将被padding挤出容器（造成内容溢出）。
+比如我们容器的长宽比是16:9，那么根据计算：100% * 9 / 16可以得到56.25%。如果你希望的是4:3，那么对应的就是100% * 3 / 4。
+具体的CSS代码如下：
+.aspectration {
+    position: relative; /*因为容器所有子元素需要绝对定位*/
+    height: 0; /*容器高度是由padding来控制，盒模型原理告诉你一切*/
+    width: 100%; 
+}
+
+.aspectration[data-ratio="16:9"] {
+    padding-top: 56.25%;
+}
+
+.aspectration[data-ratio="4:3"]{
+    padding-top: 75%;
+}
+通过通配符*选择器，让其子元素的宽高和容器.aspectration一样大小：
+.aspectration > * {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+ 
+二：padding & calc()
+这个方案采用的是padding和calc()配合在一起使用。其实原理和第一个方案是一样的。只不过在第一个方案中，
+我们每次都需要对padding的值计算，如果使用calc()可以通过浏览器直接计算出padding的百分比值。
+.aspectration[data-ratio="16:9"] {
+    padding-top: calc(100% * 9 / 16);
+}
+
+三：
+视窗单位
+CSS新特性中提供了一种新的单位vw。了解过这个单位的同学都知道，浏览器100vw表示的就是浏览器的视窗宽度(Viewport)。打个比方说，如果你的浏览器是1334px，那么对就的100vw = 1334px。这个时候也就是说1vw = 13.34px。这里的100vw也对应前面方案中的100%。这样我们就可以把前面的%单位换成vw的单位。打个比方说，16:9对应的就是100vw * 9 / 16 = 56.25vw。这个值可以用在padding-top或者padding-bottom中。但这里演示的不再是padding了，而是把这个值给height。
+
+.aspectration[data-ratio="16:9"] {
+    width: 100vw;
+    height: 56.25vw;
+}
+上面的示例中width的值是30vw,那么对应的height值就是30vw * 9 / 16 = 16.875vw。
+
+四：
+视窗单位 & CSS Grid
+这是一个很有创意的解决方案，使用的都是CSS新特性：视窗单位和CSS Grid Layout。简单说一下其中的实现原理：将容器.aspectration通过display:grid声明为一个网格容器，并且利用repeat()将容器划分为横向比例，比如16，那么每一格的宽度对应的就是100vw * 9 / 16 = 6.25vw。同样使用grid-auto-rows，将其设置的值和横向的值一样。在子元素上通过grid-column和grid-row按比例合并单元格。
+
+.aspectration {
+    display: grid;
+    grid-template-columns: repeat(16, 6.25vw);
+    grid-auto-rows: 6.25vw;
+}
+
+.aspectration[data-ratio="16:9"] .content {
+    grid-column: span 16;
+    grid-row: span 9;
+}
