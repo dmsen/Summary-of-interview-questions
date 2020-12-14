@@ -1,0 +1,26 @@
+考察闭包
+html:
+<ul id ="test">
+<li>1</li>
+<li>2</li>
+<li>3</li>
+</ul>
+
+js:
+第一种方法：利用let
+let lis = document.getElementById("test").getElementByTagName("li")
+for(let i =0,len=lis.length;i<len;i++){
+ lis[i].index = i
+ lin[i].click = function(){
+	alert(this.index)
+}
+}
+第二种方法 利用闭包
+let lis = document.getElementById("test").getElementByTagName("li")	
+for(let i =0,len=lis.length;i<len;i++){
+ lis[i].index = i;
+ lis[i].click = (
+ function(index){
+	return function(){ alert(index)  }
+})(i)
+}

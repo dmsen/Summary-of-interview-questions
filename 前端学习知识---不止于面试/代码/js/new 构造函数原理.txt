@@ -1,0 +1,14 @@
+new 构造函数的过程如下：
+新建一个空对象
+链接到原型
+绑定this
+返回新对象
+
+代码如下：
+function create(){
+	let obj = new Object()   //创建一个空对象
+	let Con = [].shift.call(arguments)  //获得构造函数
+	obj.__proto__ = Con.prototype   //链接到原型
+	let result = Con.apply(obj,arguments)   //绑定this，执行构造函数
+	return typeof result ==='object'?result:obj	
+}

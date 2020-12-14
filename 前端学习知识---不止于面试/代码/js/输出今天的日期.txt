@@ -1,0 +1,13 @@
+function getDate(){
+  let date = new Date()
+  let year = date.getFullYear()
+  year = year>9?year:'0'+year
+  let month = date.getMonth() +1
+  month = month>9?month:'0'+month
+  let day =  date.getDate()
+  return year+'-'+month+'-'+day
+}
+getDate()
+//获取年，getFullYear()返回4位的数字
+//获取月，getMonth() 月份比较特殊，0是1月，11是12月
+// 获取日,  getDate()

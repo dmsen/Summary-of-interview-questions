@@ -1,0 +1,28 @@
+//en为事件名，fn 事件处理函数，addevent 为dom元素添加自定义事件,triggerEvent 触发事件处理函数
+window.onload = function(){
+  var demo = document.getElementById("demo")
+  demo.addEvent("test",()=>{console.log ("hander1")})  
+  demo.addEvent("test",()=>{console.log ("hander2")})
+  demo.onclick = function(){
+	this.triggerEvent("test")
+}
+}
+Element.prototype.addEvent =  function(en,fn){
+  this.pools = this.pools || {}
+  if(en in this.pools){
+	this.pools[en].push(fn)
+}else{
+	this.pools[en] = []
+	this.pools[en].push(fn)
+}
+}
+Element.prototype.triggerEvent = function(en){
+  if(en in this.pools){
+	var fns = this.pools[en]
+	for(let i =0 ;length=fns.length;i<length;i++){ 
+		fns[i]()
+}else{
+	return
+}
+}
+}

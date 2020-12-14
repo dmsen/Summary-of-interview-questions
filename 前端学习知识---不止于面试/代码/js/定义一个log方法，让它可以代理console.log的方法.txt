@@ -1,0 +1,12 @@
+单个参数：
+function log(val){
+	console.log(val)
+}
+log("hello")
+多个参数
+function log(){
+	console.log.apply(console,arguments)
+}
+log("hello","world")
+
+知识点：arguments参数

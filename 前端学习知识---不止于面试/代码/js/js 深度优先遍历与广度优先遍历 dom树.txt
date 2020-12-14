@@ -1,0 +1,141 @@
+一：假设dom树如下：
+<body>
+<div class="d1">
+	<div class="d2"></div>
+</div>
+<div class="d3">
+    <div class="d4"></div>
+    <div class="d5">
+        <div class="d6"></div>
+    </div>
+    <div class="d7">
+        <div class="d8"></div>
+
+    </div>
+</div>
+<span class="s1">
+    <a class="a1" href=""></a>
+</span>
+<srcipt>  //用来实现遍历    </script>
+<body>
+
+
+二、深度优先遍历
+深度优先遍历，顾名思义即是先抓着一个元素一直往下遍历它的子孙元素，直到没有未被遍历的元素时则换下一个元素继续往下遍历。当全部元素都遍历完了就结束。
+按照当前树结构来遍历的话就是：
+body -> d1 -> d2
+d3 -> d4
+d5 -> d6
+s1 -> a1
+总的遍历顺序为：body -> d1 -> d2 -> d3 -> d4 -> d5 -> d6 -> s1 -> a1
+最终结果：(12) [body, div.d1, div.d2, div.d3, div.d4, div.d5, div.d6, div.d7, div.d8, span.s1, a.a1, script]
+代码如下：
+<script>
+function dfc(root){
+if(root==null)
+    return [];
+var result = [];//存放遍历结果的数组
+var nodeStack = [];//暂存元素的栈
+nodeStack.push(root);
+while(nodeStack.length>0){
+    let n = nodeStack.pop();
+    result.push(n);
+    let children = n.children;
+    //要从左到右遍历，所以要反向进栈
+    for(let i=children.length-1;i>=0;i--){
+        nodeStack.push(children[i]);
+        }
+    }
+return result;
+}
+console.log(dfc(document.body));
+</script>
+
+
+
+三：广度优先遍历
+(12) [body, div.d1, div.d3, span.s1, script, div.d2, div.d4, div.d5, div.d7, a.a1, div.d6, div.d8]
+
+<script>
+
+function bfc(root){
+    if(root==null)
+        return [];
+    var result = [];//存放遍历结果的数组
+    var nodeQueue = [];//暂存元素的队列
+    nodeQueue .push(root);
+    while(nodeQueue.length>0){
+        let n = nodeQueue.shift();
+        result.push(n);
+        let children = n.children;
+        for(let i=0;i<children.length;i++){
+            nodeQueue.push(children[i]);
+        }
+    }
+    return result;
+}
+console.log(bfc(document.body));
+</script>
+
+
+
+测试demo：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div class="d1">
+        <div class="d2"></div>
+    </div>
+    <div class="d3">
+        <div class="d4"></div>
+        <div class="d5">
+            <div class="d6"></div>
+        </div>
+        <div class="d7">
+            <div class="d8"></div>
+        </div>
+    </div>
+    <span class="s1">
+        <a class="a1" href=""></a>
+    </span> 
+
+</body>
+<script>
+    function dfc(root){
+    if(root==null)
+        return [];
+    var result = [];//存放遍历结果的数组
+    var nodeStack = [];//暂存元素的栈
+    nodeStack.push(root);
+    // console.log(nodeStack[nodeStack.length-1])
+    // console.log('分割')
+    while(nodeStack.length>0){
+        console.log(nodeStack)
+        console.log('分割')
+        let n = nodeStack.pop();
+        console.log(n)
+        result.push(n);
+        let children = n.children;
+        //要从左到右遍历，所以要反向进栈
+        for(let i=children.length-1;i>=0;i--){
+            console.log("循环")
+            console.log(children[i])
+            nodeStack.push(children[i]);
+            }
+        }
+    return result;
+    }
+    console.log(dfc(document.body));
+    </script>
+
+</html>
+
+
+
+

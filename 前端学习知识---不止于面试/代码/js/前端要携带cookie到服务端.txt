@@ -1,0 +1,17 @@
+Access-Control-Allow-Origin为*的时候，前端设置withCredentials：true，将不能发送cookie到服务端。
+
+此外，前端要发送cookie到服务端，还要 XMLHttpRequest 的 withCredentials 标志设置为 true，且
+
+服务器端的响应中未携带 Access-Control-Allow-Credentials: true。
+
+XMLHttpRequest 的 withCredentials 标志设置为 true，是为了客户端向服务端发送cookie，
+
+响应中Access-Control-Allow-Credentials: true，是为了客户端能够接收cookie，无此标记，浏览器将不会把响应内容返回给请求的发送者。
+
+因此，前端要携带cookie到服务端，需要三个条件：
+
+1. Access-Control-Allow-Origin不能为*，应为具体域名
+
+2. 服务端Access-Control-Allow-Credentials应为true
+
+3. 客户端XMLHttpRequest 的 withCredentials=true

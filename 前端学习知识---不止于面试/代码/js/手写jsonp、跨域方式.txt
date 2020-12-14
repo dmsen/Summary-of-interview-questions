@@ -1,0 +1,20 @@
+JSONP : 利用 <script> 标签不受跨域限制的特点，缺点是只能支持 get 请求
+所以可以利用jsonp来跨域
+函数如下：
+function jsonp(url,jsonpCallback,success){  ////地址、回调函数名、回调函数
+  const script = document.creatElement('script')
+  script.src = url
+  script.async = true
+  script.type = 'text/javascript'
+  window[jsonCallback] = function(data){
+  	success &&success(data)
+	document.body.removeChild(script);
+}
+  document.body.appendChild(script)
+}
+
+其他实现跨域的方式：
+跨域资源共享（CORS）:Access-Control-Allow-Origin：*
+nginx 跨域配置
+node.js中间件
+vue.js  配置config  baseUrl

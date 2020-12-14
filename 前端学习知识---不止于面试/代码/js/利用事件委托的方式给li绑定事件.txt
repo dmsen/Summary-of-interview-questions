@@ -1,0 +1,176 @@
+一种方法：
+  window.onload = function () {
+            var oul = document.getElementsByTagName('ul')[0]
+            console.log(oul,typeof oul)
+            console.log(document.getElementsByTagName('ul'),typeof document.getElementsByTagName('ul'))
+            console.log(document.getElementById('ul1'),typeof document.getElementById('ul1'))   //也可实现同样的效果
+            //用一个变量接受添加的标li标签，可以提高运行速度。
+            //循环添加10000个li标签。
+            var str = '';
+            for (var i = 0; i < 10000; i++) {   //添加10000条数据
+                str += '<li>' + (i+1) + '</li>';
+            }
+            oul.innerHTML = str;//
+            //事件委托，把事件添加给父元素，当事件发生时，父元素会找到对应触发事件的子元素去处理，
+            //用事件委托方式添加的事件，后期新添加的子元素仍有这个事件。
+            oul.onclick = function(ev){
+                var ev = window.event || ev;//兼容
+                var targ = ev.target || ev.srcElement;
+                // if(targ.innerHTML%2==0){//找到符合条件的子元素、
+                    targ.style.background = 'blue';
+                // }
+            }
+        }
+完整例子：
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+        ul{
+            padding:0 0 0 20px;
+        }
+        li{
+            width: 100%;
+            height: 30px;
+            background: yellowgreen;
+            margin-top: 1px;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var oul = document.getElementsByTagName('ul')[0]
+            console.log(oul,typeof oul)
+            console.log(document.getElementsByTagName('ul'),typeof document.getElementsByTagName('ul'))
+            console.log(document.getElementById('ul1'),typeof document.getElementById('ul1'))
+            //用一个变量接受添加的标li标签，可以提高运行速度。
+            //循环添加10000个li标签。
+            var str = '';
+            for (var i = 0; i < 10; i++) {
+                str += '<li>' + (i+1) + '</li>';
+            }
+            oul.innerHTML = str;//
+            //事件委托，把事件添加给父元素，当事件发生时，父元素会找到对应触发事件的子元素去处理，
+            //用事件委托方式添加的事件，后期新添加的子元素仍有这个事件。
+            oul.onclick = function(ev){
+                var ev = window.event || ev;//兼容
+                var targ = ev.target || ev.srcElement;    
+                console.log(ev,targ)   //mouseEvent      targ: <li>
+                // if(targ.innerHTML%2==0){//找到符合条件的子元素、
+                    targ.style.background = 'blue';
+                // }
+            }
+        }
+    </script>
+</head>
+ 
+<body>
+    <ul id='ul1'></ul>
+</body>
+ 
+</html>
+
+
+
+======================================================
+
+二
+js:
+var uls = document.getElementSByTagName('ul')[0]
+uls.onclick = function(e){
+	e = e||window.event
+	target = e.target || e.srcElement
+	target.style.background = 'blue'
+}
+完整例子：
+
+<!DOCTYPE html>
+ 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title>事件委托</title>
+</head>
+<body>
+<div>
+<ul id="ulItem">
+<li id="li1">1</li>
+<li id="li2">2</li>
+<li id="li3">3</li>
+<li id="li4">4</li>
+<li id="li5">5</li>
+<li id="li6">6</li>
+<li id="li7">7</li>
+<li id="li8">8</li>
+<li id="li9">9</li>
+<li id="li10">10</li>
+</ul>
+</div>
+<script type="text/javascript"> 
+var ulItem = document.getElementById("ulItem");
+ulItem.onclick = function(e){
+e = e || window.event;//这一行及下一行是为兼容IE8及以下版本
+var target = e.target || e.srcElement;
+if(target.tagName.toLowerCase() === "li"){
+alert(target.innerHTML);
+}
+
+
+
+三：
+ //给ul下的li元素绑定不同事件
+    var list = document.getElementById('myList');
+    list.addEventListener('click',function(event){
+        event = event || window.event;
+        var target = event.target || event.srcElement;
+        switch(target.id){
+            case "list1" : console.log('list1'); 
+                break;
+            case "list2" : console.log("list2");
+                break;
+            case "list3" : console.log("list3");
+                break;
+            case "list4" : console.log("list4");
+                break;
+        }
+    },false);
+
+例子：
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {margin: 0;padding: 0;}
+        #myList {width: 200px;height: 200px;margin: 50px;list-style: none;background: #ccc;overflow: hidden;}
+        #myList li {width: 100%;border-top: 1px solid black;line-height: 50px;}
+        #myList li:first-child {border-top: 0;}
+    </style>
+</head>
+
+<body>
+    <ul id="myList">
+        <li id="list1">列表1</li>
+        <li id="list2">列表2</li>
+        <li id="list3">列表3</li>
+        <li id="list4">列表4</li>
+    </ul>
+</body>
+</html>
+
+
+
+
+}
+</script> 
+</body>

@@ -1,0 +1,22 @@
+浅拷贝：
+Object.assign({},obj)
+展开运算符
+let a = {
+ age: 1,
+ name:"hello",
+ arr:[1,2]
+}
+let b = Object.assign({}, a)
+a.age = 2
+a.name='he'
+a.arr[0] = 2
+console.log(b.age,b.name,b.arr) // 1  ''hello  [2,2]
+总结：
+浅拷贝只解决了值的拷贝的问题，如果接下去的值中还有对象即引用数据的话，两者享有相同的引用，所以都会改变。
+
+
+
+深拷贝：
+JSON.parse(JSON.stringify(object))
+上面方法缺点：
+不能序列化函数，会忽略undifined，不能解决循环引用对象。

@@ -1,0 +1,52 @@
+知识点:
+增加事件监听：element.addEventListener(type,fn,false或true（事件捕获）) ie 中 attachEvent('on'+type)
+移除事件监听：element.removeEventListener(type,fn,false)  	ie 中 detachEvent('on' +type)
+阻止冒泡      ： event.stopPropagation() 			ie 中 event.cancelBubble = true
+阻止事件默认行为:event.preventDefault()			ie中 event.returnValue = false
+获取事件目标：event.target					ie中 event.srcElement
+
+
+var Event ={
+addEvent:function(element,type,fn){
+	if(elment.addEventListener){
+		elment.addEventListener(type,fn,false)
+	}else if(element.attachEvent){
+		element.attachEvent('on'+type,function(){
+		fn.call(element)
+	})
+	}else{
+		elment['on'+type] = fn
+	}
+},
+removeEvent:function(element,type,fn){
+	if(elment.removeEventListener){
+		elment.removeEventListener(type,fn,false)
+	}else if(element.detachEvent){
+		element.detachEvent('on'+type,fn)
+	}else{
+		elment['on'+type] = null
+	}
+	
+},
+//阻止事件冒泡e.stopPropagations()  ie中 e.canceBubble= true
+cancelBuble:function(e){
+	if(e.stopPropagation){
+	e.stopPropagation()
+	}else{
+	e.cancelBubble = true
+	}
+},
+//阻止事件的默认行为   e.preventDefault()  ie中 e.returnValue = false
+preventDefault:function(e){
+	if(e.preventDefault){
+		e.preventDefault()
+	}else{
+		e.returnValue = false
+	}
+},
+//获取事件目标   e.target   ie中srcElement
+getTarget:function(e){
+	return e.target || e.srcElement
+}
+
+}

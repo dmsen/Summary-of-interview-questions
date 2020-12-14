@@ -1,0 +1,20 @@
+Function.prototype.bind = function(ctx){
+	var fn = this
+	return function(){
+		fn.apply(ctx,arguments)
+	}
+}
+
+知识点：
+bind方法
+var write = document.write;
+write.bind(document)('hello');
+
+call方法
+var write = document.write;
+write.call(document,'hello');
+
+apply方法
+var write = document.write;
+write.apply(document,['hello']);
+
