@@ -1,0 +1,46 @@
+session和cookie的应用场景和区别
+　cookie存于客户端，session存于服务器端。
+    cookie的作用是与服务器进行交互，作为http规范的一部分存在，而web storage是为了在本地存储“数据”而生。
+    cookie应用场景：①判断用户是否登录过网站； ②用来记录购物车或者记录用户使用偏好来制定推送；
+    session应用场景：①登录验证信息
+　cookie是网站为了标示用户身份而储存在用户本地终端（Client Side）上的数据（通常经过加密）。
+　cookie数据始终在同源的http请求中携带（即使不需要），记会在浏览器和服务器间来回传递。
+　sessionStorage和localStorage不会自动把数据发给服务器，仅在本地保存。
+
+    有效期不同：
+　localStorage：存储持久数据，浏览器关闭后数据不丢失除非主动删除数据；
+　sessionStorage：数据在当前浏览器窗口关闭后自动删除。
+　cookie：设置的cookie过期时间之前一直有效，即使窗口或浏览器关闭
+
+    作用域不同：
+    sessionStorage：在打开的不同浏览器窗口不共享，既使是同一页面（可以通过其他方法解决）
+（通过点击链接（或者用了 window.open）打开的新标签页之间是属于同一个 session 的，但新开一个标签页总是会初始化一个新的 session，即使网站是一样的，它们也不属于同一个 session。）
+    localStorage：在同源页面共享
+    cookie：同源页面共享
+
+　存储大小：
+　cookie数据大小不能超过4k
+　sessionStorage和localStorage 虽然也有存储大小的限制，但比cookie大得多，可以达到5M或更大。
+
+解决sessionStorage在同一网站下不共享的问题
+可以利用window.opener来解决，自己写了一个set和get函数，如下：
+
+function setSession(name, value) {
+  if (window.opener && Object.getOwnPropertyNames(window.opener).length > 0) {
+    window.opener.sessionStorage.setItem(name, value)
+  } else {
+    sessionStorage.setItem(name, value)
+  }
+}
+function getSession(name) {
+  if (window.opener && Object.getOwnPropertyNames(window.opener).length > 0) {
+    return window.opener.sessionStorage.getItem(name)
+  } else {
+    return sessionStorage.getItem(name)
+  }
+}
+
+Window opener 属性
+定义和用法
+opener 属性是一个可读可写的属性，可返回对创建该窗口的 Window 对象的引用。
+当使用window.open()打开一个窗口，您可以使用此属性返回来自目标窗口源（父）窗口的详细信息。

@@ -1,0 +1,58 @@
+content 方面
+减少 HTTP 请求：合并文件、 CSS 精灵、 inline Image
+减少 DNS 查询： DNS 缓存、将资源分布到恰当数量的主机名
+减少 DOM 元素数量
+
+Server 方面
+使用 CDN
+配置 ETag
+对组件使用 Gzip 压缩
+
+Cookie 方面
+减小 cookie 大小
+
+css 方面
+将样式表放到页面顶部
+不使用 CSS 表达式
+使用 <link> 不使用 @import
+
+Javascript 方面
+将脚本放到页面底部
+将 javascript 和 css 从外部引入
+压缩 javascript 和 css
+删除不需要的脚本
+减少 DOM 访问
+
+图片方面
+优化图片：根据实际颜色需要选择色深、压缩
+优化 css 精灵图
+不要在 HTML 中拉伸图片
+
+渲染优化
+禁止使用 iframe （阻塞父文档 onload 事件）
+iframe 会阻塞主页面的 Onload 事件
+搜索引擎的检索程序无法解读这种页面，不利于SEO
+iframe 和主页面共享连接池，而浏览器对相同域的连接有限制，所以会影响页面的并
+行加载
+使用 iframe 之前需要考虑这两个缺点。如果需要使用 iframe ，最好是通过
+javascript
+动态给 iframe 添加 src 属性值，这样可以绕开以上两个问题
+禁止使用 gif 图片实现 loading 效果（降低 CPU 消耗，提升渲染性能）
+使用 CSS3 代码代替 JS 动画（尽可能避免重绘重排以及回流）
+对于一些小图标，可以使用base64位编码，以减少网络请求。但不建议大图使用，比较耗
+费 CPU
+小图标优势在于
+减少 HTTP 请求
+避免文件跨域
+修改及时生效
+页面头部的 <style></style> <script></script> 会阻塞页面；（因为 Renderer 进程
+中 JS 线程和渲染线程是互斥的）
+页面中空的 href 和 src 会阻塞页面其他资源的加载 (阻塞下载进程)
+网页 gzip ， CDN 托管， data 缓存 ，图片服务器
+前端模板 JS+数据，减少由于 HTML 标签导致的带宽浪费，前端用变量保存AJAX请求结
+果，每次操作本地变量，不用请求，减少请求次数
+用 innerHTML 代替 DOM 操作，减少 DOM 操作次数，优化 javascript 性能
+当需要设置的样式很多时设置 className 而不是直接操作 style
+少用全局变量、缓存 DOM 节点查找的结果。减少 IO 读取操作
+图片预加载，将样式表放在顶部，将脚本放在底部 加上时间戳
+对普通的网站有一个统一的思路，就是尽量向前端优化、减少数据库操作、减少磁盘 IO

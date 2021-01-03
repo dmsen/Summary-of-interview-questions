@@ -1,0 +1,23 @@
+npm 安装包的时候我们经常 遇见 -s -D -g 之类的后缀 他们都是什么意思呢？ 这里用一段简单的话来概述：
+
+-S -save 的缩写 用于生产（上线）环境下，包名会被注册在package.json的dependencies里面，在生产环境下这个包的依赖依然存在；
+
+-D -dev（生产） 包名会被注册在package.json的devDependencies里面，仅在开发环境下存在的包用-D，如babel，sass-loader这些解析器
+
+devDependencies ，是我们开发的时候需要用到的一些包，只需要用于开发阶段，真正打包上线的时候并不需要这些包，因为这些工具只是你用来打包代码的，是用来识别特定文件以及代码，帮助我们生产最终文件的
+
+dependencies，这个则是需要发布到生产环境中的，就比如你要跑一个基于vue的项目，所以需要vue.js来支持，而这个vue.js文件就需要跟随项目到最终的生产环境
+
+-g 是全局安装
+
+**注意：**在使用npm install一个插件的时候，需要添加上-s或-d，不然不会再package.json中显示
+
+
+
+dependencies与devDependencies的区别
+
+devDependencies 里面的插件只用于开发环境，不用于生产环境
+dependencies 是需要发布到生产环境的
+比如说：
+你开发一个前端项目，在项目中你需要使用gulp构建你的开发和本地运行环境,这时你就要放到devDependencies里。gulp是你用来压缩代码，打包等需要的工具，程序实际运行的时候并不需要，所以放到dev里就ok了。
+你写程序要用element-ui,生产环境运行项目时肯定要用到element-ui,这时element-ui就应该安装到dependencies中去。

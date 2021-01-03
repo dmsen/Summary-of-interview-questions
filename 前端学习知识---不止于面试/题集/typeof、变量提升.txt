@@ -1,0 +1,10 @@
+console.log(typeof a);    // undifined   对于基本类型 除了null 都可以正常输出
+console.log(typeof b);  //  object   错 这里应该是函数  function，  typeof对于对象、数组都是object 函数为function
+console.log(typeof c);  //refrenceError  c 未定义  
+var a = 3;
+function b() {}
+var b = 2;
+let c = 2;
+//这里尤为需要注意
+typeof 对于基本类型，除了 null 都可以显示正确的类型
+typeof 对于对象，除了函数都会显示 object

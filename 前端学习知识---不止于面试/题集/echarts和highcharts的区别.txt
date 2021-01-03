@@ -1,0 +1,16 @@
+1、学习容易程度：只要懂JS，那么相信你能很快上手。两者打分相同。但是百度出品的Echarts对于国内城市已经有了相应的配置，调用非常方便。因此在绘制地图方面，Echarts略胜一筹。
+
+2、大数据表现力：有网友说，当数据量达到万条的级别时，Highcharts的多表联动、自动缩放具有更强的优势，而Echarts则会出现明显的卡顿，需要设置datazoom。因此Hightcharts完胜。
+
+3、文档友好程度：Echarts是百度的，Highcharts是国外的。另外，Echarts的文档像是说明书，而Highcharts的文档像是博客。个人仍偏向于说明书一样的文档，容易定位，因此我为Echarts转身。
+
+4、图表美观程度：看看两家的实例Echarts、Highcharts，Echarts完爆啊（上面的对比雷达图就是用Echarts做的）！而且Echarts基于Canvas，对于3D绘图有绝对优势，能画出极漂亮的图形。
+
+5、图表配置的自由度：Highcharts基于SVG，方便定制，同类型的图表，Highcharts能玩出100种花样。极高的自由度非常适用于定制商业化的大屏。
+
+6、图表的丰富程度：两方面，一是图表种类，二是3D表现力。Echarts丰富的图表种类，和惊艳的3D效果，吊打Highcharts。
+
+作者：章光辉_数据分析师
+链接：https://www.jianshu.com/p/6ac06c9052ae
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

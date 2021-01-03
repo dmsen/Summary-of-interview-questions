@@ -1,0 +1,9 @@
+Function.prototype.a = () => alert(1);
+Object.prototype.b = () => alert(2);
+function A() {};
+var a = new A();
+a.a();报错 a不是一个函数    //A.a() 可以实现
+a.b();   
+//a.__proto__ == A.prototype //true
+//a.constructor //f A()
+//a.__proto__  // {constructor:f A()}

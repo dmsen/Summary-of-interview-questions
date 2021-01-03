@@ -1,0 +1,42 @@
+Map 对象保存键值对。任何值(对象或者原始值) 都可以作为一个键或一个值。
+语法
+new Map([iterable])
+参数
+iterable
+Iterable 可以是一个数组或者其他 iterable 对象，其元素或为键值对，或为两个元素的数组。 每个键值对都会添加到新的 Map。 null 会被当做  undefined。
+描述
+一个Map对象以插入顺序迭代其元素 — 一个  for...of 循环为每次迭代返回一个[key，value]数组。
+
+Objects 和 maps 的比较
+Object 和 Map类似的一点是,它们都允许你按键存取一个值,都可以删除键,还可以检测一个键是否绑定了值.因此,一直以来,我们都把对象当成Map来使用,不过,现在有了Map,下面的区别解释了为什么使用Map更好点.
+区别如下：
+一个对象通常都有自己的原型,所以一个对象总有一个"prototype"键。不过，从 ES5 开始可以使用 map = Object.create(null)来创建一个没有原型的对象。
+map的实例的对象原型是map；Object.create(null)来创建一个没有原型的对象的原型为undifined.
+一个对象的键只能是字符串或者 Symbols，但一个 Map 的键可以是任意值。
+你可以通过size属性很容易地得到一个Map的键值对个数，而对象的键值对个数只能手动确认（对象的长度不能用.length获取，用js原生的Object.keys可以获取到）
+
+示例
+var myMap = new Map(); var keyObj = {}, keyFunc = function () {}, keyString = "a string"; // 添加键 myMap.set(keyString, "和键'a string'关联的值"); myMap.set(keyObj, "和键keyObj关联的值"); myMap.set(keyFunc, "和键keyFunc关联的值"); myMap.size; // 3 // 读取值 myMap.get(keyString); // "和键'a string'关联的值" myMap.get(keyObj); // "和键keyObj关联的值" myMap.get(keyFunc); // "和键keyFunc关联的值" myMap.get("a string"); // "和键'a string'关联的值" // 因为keyString === 'a string' myMap.get({}); // undefined, 因为keyObj !== {} myMap.get(function() {}) // undefined, 因为keyFunc !== function () {}
+
+将NaN作为映射的键
+NaN 也可以作为Map对象的键. 虽然 NaN 和任何值甚至和自己都不相等(NaN !== NaN 返回true), 但下面的例子表明, 两个NaN作为Map的键来说是没有区别的:
+var myMap = new Map(); myMap.set(NaN, "not a number"); myMap.get(NaN); // "not a number" var otherNaN = Number("foo"); myMap.get(otherNaN); // "not a number"
+
+使用for..of方法迭代映射
+映射也可以使用for..of循环来实现迭代：
+myMap.forEach(function(value, key) { console.log(key + " = " + value); }, myMap) // 将会显示两个logs。 一个是 "0 = zero" 另一个是 "1 = one"
+
+使用forEach()方法迭代映射
+映射也可以通过forEach()方法迭代：
+myMap.forEach(function(value, key) { console.log(key + " = " + value); }, myMap) // 将会显示两个logs。 一个是 "0 = zero" 另一个是 "1 = one"
+
+
+映射与数组对象的关系
+var kvArray = [["key1", "value1"], ["key2", "value2"]];
+// 使用映射对象常规的构造函数将一个二维键值对数组对象转换成一个映射关系
+var myMap = new Map(kvArray);
+myMap.get("key1"); // 返回值为 "value1"
+// 使用展开运算符将一个映射关系转换成一个二维键值对数组对象
+console.log(uneval([...myMap])); // 将会向您显示和kvArray相同的数组
+// 或者使用展开运算符作用在键或者值的迭代器上，进而得到只含有键或者值得数组
+console.log(uneval([...myMap.keys()])); // 输出 ["key1", "key2"

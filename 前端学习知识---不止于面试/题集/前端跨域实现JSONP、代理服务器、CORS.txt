@@ -1,0 +1,87 @@
+前端跨域实现JSONP、代理服务器、CORS
+
+一、JSONP
+
+JSONP(JSON with Padding)，前端+后端⽅方案，绕过跨域。
+前端构造script标签请求指定url(由script标签发出的get请求不受同源限制)；服务器返回一个函数执行语句，函数与查询参数callback值对应，函数的参数为服务器返回的json数据；改函数在前端执行后即可获取数据。
+如下构造3000端口的服务访问客户端页面，然后去请求4000端口下的服务~~~~
+客户端===》
+
+<script>
+    function showInfo123(data) {
+        console.log('showInfo123', data)
+        document.writeln(`Response:     ${JSON.stringify(data)}`)
+    }
+</script>
+<script src="http://127.0.0.1:4000/getUser?callback=showInfo123"></script>
+服务端===》
+
+const http=require('http');
+const urlModule = require('url')
+const server = http.createServer((req,res)=>{
+const {method}=req;
+const { pathname: url, query } = urlModule.parse(req.url, true)
+if (method == 'GET' && url == '/getUser') {
+var data = {
+    name: 'luna',
+    age: 18,
+    gender: 'female'
+}
+var scriptStr = `${query.callback} (${JSON.stringify(data)})`
+console.log(scriptStr)
+//res.end返回的是callback函数及data，如上拼接
+res.end(scriptStr)
+}
+})
+server.listen(4000,()=>{
+    console.log('4000端口已启动')
+})
+二、CORS-跨域资源共享
+
+a、请求为get、post、head且没有自定义请求头，Content-Type是application/x-www-form-urlencod,multipart/form-data或text/plain之一，直接在响应头添加跨域允许：
+res.setHeader('Access-Control-Allow-Origin','xxx')
+对应上述示例服务器：
+res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
+b、响应preflight请求，需要响应浏览器发出options请求(预检请求)，并根据情况设置响应头；
+对应上例客户端：    axios.default.baseURL='http://localhost:3000'
+axios.get('/users',{header:{'X-Token':'jiji'}})
+服务器端增加预检：
+else if (method == "OPTIONS" && url ==              "/getUser") {
+    res.writeHead(200, {
+        "Access-Control-Allow-Origin":                  "http://localhost:3000",
+        "Access-Control-Allow-Headers": "X-             Token,Content-Type",
+        "Access-Control-Allow-Methods": "PUT"
+    });
+    res.end();
+ }else if ((method == "GET" || method == "POST") && url == "/users") {}
+ps:携带cookie信息怎么做？
+a、服务端
+
+res.setHeader("Access-Control-Allow-Credentials","true");
+res.setHeader("Set-Cookie","cookie1=val222")
+b、客户端设置withCredentials为true
+
+axios.defaults.withCredentials = true
+三、代理服务器
+// vue.config.js
+
+module.exports = {
+    devServer: {
+        disableHostCheck: true,
+        compress: true,
+        port: 5000,
+        proxy: {
+            '/api/': {
+                target: 'http://localhost:4000',
+                changeOrigin: true,
+            },
+        },
+    },
+}
+服务端的代理配置：
+
+var express = require('express');
+const {proxy} = require('http-proxy-middleware')
+const app = express()
+app.use('/api', proxy({target:'http://localhost:4000',changeOrigin:false}))
+app.listen(3000)//3000端口去访问4000的服务

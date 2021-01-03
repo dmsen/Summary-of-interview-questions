@@ -1,0 +1,122 @@
+Web数据存储之localStorage和sessionStorage
+学习前端以来，自己了解有localStorage和sessionStorage的相关存储的知识，也有实践过，但是之前只限于能用的基础上，但最近看了一本书，深入了解了localStorage和sessionStorage，才意识到自己了解太表面，于是想借此总结一下。
+
+1.Web存储简介
+Web存储分为两种，分别对应两个JavaScript对象：
+
+本地存储：对应localStorage对象，用于长期保存网站的数据，并且站内任何页面都可以访问该数据。也就是说，如果有一个网页利用本地存储保存了数据，那么访客在一天后、一星期后，甚至一年之后再上线，该数据仍然还会在那儿。
+会话存储：对应sessionStorage对象，用于临时保存针对一个窗口（或标签页）的数据。在访客关闭窗口或标签页之前，这些对象是存在的，而关闭之后就会被浏览器删除。不过，只要用户不关闭窗口或标签页，就算他从你的网站跑到别人的网站然后又回来，这些数据还是会存在的。
+
+区别：从页面代码的角度说，本地存储和会话存储的操作完全相同。它们的区别仅在于数据的寿命。本地存储主要用于保存访客将来还能看到的数据，而会话存储则用于保存那些需要从一个页面传递到下一个页面的数据。
+
+注意：
+
+无论是本地存储还是会话存储，都是与网站所在的域联系在一起的
+由于数据保存在用户的计算机上（或移动设备上），这些数据也是跟计算机绑定的；页面不能访问保存在其他计算机上的数据。类似的，如果你用不同的用户名登录自己的电脑，或者使用不同的浏览器,那么存取的也将是不同的本地存储数据。
+
+尽管HTML5没有硬性规定存储空间的上限，但大多数浏览器都把本地存储限制为5MB以下
+
+2.存储数据
+要把一段信息保存到本地存储或会话存储中，首先要为该信息想一个合适的名字。这个名字叫作键，将来要通过它来取回数据。
+
+1.保存数据
+
+要保存数据，需使用localStorage.setItem()方法：
+
+localStorage.setItem(keyName, data);
+
+如下所示，保存用户名，那么这个键就可以叫作user_name;
+
+localStorage.setItem("user_name", "xingxi");
+
+当然，像这样保存硬编码的数据没有多大意思。更多的情况下，可以保存动态数据，比如当前日期、数据计算的结果等，或者用户在文本框中输入的某些文本，等等。如：
+
+//取得文本框
+var nameInput = document.getElementById("userName");
+//保存文本框中的文本
+localStorage.setItem("user_name", nameInput.value);
+
+2.读取数据
+读取本地存储中是数据跟保存数据一样简单，只需要使用localStorage.getItem()方法。
+
+//读取用户名
+localStorage.getItem("user_name");
+
+无论这个名字是5秒前保存的，还是5个月前保存的，这行代码都管用。
+
+当然，有可能这个键下面尚未保存任何数据。要检测某个键是否为空，可以直接测试它是否等于null。如：
+
+if(localStorage.getItem("user_name") == null) {
+    alert("不存在这样的名字哦。")
+}else {
+    //将用户名放到文本框中
+    document.getElementById("userName").value = localStorage.getItem("user_name");
+}
+
+会话存储也一样简单。唯一的区别是使用sessionStorage对象，而不是使用localStorage对象。
+
+Web存储还支持两种读写数据的语法，除了使用getItem()和setItem()，还可以使用属性名或索引方式。
+
+属性名：localStorage.user_name;
+索引方式: localStorage[“user_name”]
+注意：没有web服务器则不能使用web存储：在很多浏览器中，只有web服务器上打开的页面才能读写web存储。无论这个web服务器是远程的还是本地的–关键就是不能从本地硬盘上打开页面。这个问题的根源就在于浏览器要限制web存储的空间大小。
+
+3.浏览器对Web存储的支持情况
+Web存储是现代浏览器支持情况最好的HTML5功能之一。在不支持Web存储的可能就只有IE7了。如果要兼容IE7，可以使用cookie来模拟Web存储。虽然不完美，但是可行。
+
+4.深入Web存储
+前面已经介绍过关于Web存储的基础知识，接下来会介绍从Web存储中删除数据项，检索当前保存的所有数据，以及处理不同的数据类型、保存自定义对象和响应存储数据变化。
+
+4.1 删除数据项
+这个任务只要调用removeItem()方法，传入键名，即可删除不想要的数据。
+
+localStorage.removeItem("user_name");
+
+或者调用clear()方法，清空网站在本地保存的会话数据。
+
+sessionStorage.clear();
+
+4.2 查找所有数据项
+使用key()方法从本地或会话存储中取得（当前网站保存的）所有数据项。
+
+localStorage.key();  //可以取出所有数据项
+
+4.3 保存数值和日期
+到目前为止，我们还遗漏了关于web存储的一个重要细节：在通过localStorage和sessionStorage保存数据时，该数据会自动被转换为本文字符串。对于本来就是文本的数据，这当然没有问题，但数值就不一样了。
+
+//oldX=5 为数值
+newX = localStorage.getItem("oldX");
+newX += 5;  //结果会变成‘55’
+这里因为newX为字符串，javascript把5转化为字符串了，实际运行的是’5’+ ‘5’，结果为55，而不是10。这里的解决办法是需要给javascipt一个提示，告诉它你想计算两个数值的加法。办法如下：
+
+newX = Number(localStorage.getItem("oldX"));
+保存日期也是同样的道理，结果并不会保存日期对象，而是会保存一个文本字符串。可是要将文本字符串转回日期对象可不容易。为了解决这个问题，可以采用如下的方法：
+
+//创建日期对象
+var today = new Date();
+
+//按照YYYY/MM/DD的标准格式把日期转换成文本字符串
+var todayString = today.getFullYear() + "/" + today.getMonth() + "/" + today.getDate();
+sessionStorage.setItem("session_started", todayString);
+...
+//取得日期文本，并基于该文本创建的日期对象，因为文本格式是有效的日期形式
+today = new Date(sessionStorage.getItem("session_started"));
+
+4.4 保存对象
+为了把自定义对象保存到Web存储中，必须先把对象转换为文本形式。JSON是把结构化数据（类似封装在对象中的那些值）转化为文本的一种简便格式。
+直接调用JSON.stringify()就可以把任何对象连同其数据转换为文本形式。调用JSON.parse()则可以把文本转换回对象。
+
+var params = {
+    name: xingxi,
+    age: 20
+}
+//将数据保存为JSON格式
+sessionStorage.setItem("message", JSON.stringify(params));
+//JSON文本转换为原来的对象
+JSON.parse(sessionStorage.getItem(message));
+
+4.5 响应存储变化
+Web存储为我们提供了在不同浏览器窗口间通信的机制。具体来说，就是在本地存储或会话存储发生变化时，其他查看同一页面或同一站点中其他页面的窗口就会触发window.onStorage事件。
+所谓存储变化，指的就是向存储中添加新数据项，修改既有数据项，删除数据项或清除所有数据。但是，那些对存储不产生任何影响的操作（如用既有的键名保存相同的值，或者清除原本就是空的存储空间），不会引发onStorage事件
+
+通过认真深入的学习这一块的知识，现在对Web存储有了比较深入的了解。

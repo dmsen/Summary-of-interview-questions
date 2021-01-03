@@ -1,0 +1,87 @@
+async function foo() {
+    console.log('foo')
+}
+async function bar() {
+    console.log('bar start')
+    await foo()
+    console.log('bar end')
+}
+console.log('script start')
+setTimeout(function () {
+    console.log('setTimeout')
+}, 0)
+new Promise(function (resolve) {
+    console.log('promise executor')
+    resolve();
+}).then(function () {
+    console.log('promise then1')
+}).then(() => {
+    console.log('promise then2')
+})
+bar();
+console.log('script end');
+我的答案（错误）：
+script start
+promise executor
+bar start
+
+bar end
+script end'promise then1
+promise then1
+promise then2
+foo
+setTimeout
+正确答案（async 后面的代码进入了微进程执行）
+script start
+promise executor
+bar start
+
+foo
+script end （到这里 主进程上的任务执行完毕）
+promise then1
+bar end（这里是async await后面的微任务 在第一个than后开始执行）
+promise then2
+setTimeout （宏任务最后执行）
+
+
+
+扩展：
+async function foo() {
+    console.log('foo')
+}
+async function bar() {
+    console.log('bar start')
+    await foo()
+    console.log('bar end')
+    console.log('bar end2')
+}
+console.log('script start')
+setTimeout(function () {
+    console.log('setTimeout')
+}, 0)
+new Promise(function (resolve) {
+    console.log('promise executor')
+    resolve();
+}).then(function () {
+    console.log('promise then1')
+}).then(() => {
+    console.log('promise then2')
+}).then(function () {
+    console.log('promise then3')
+})
+bar();
+console.log('script end');
+答案：
+script start
+VM701:15 promise executor
+VM701:5 bar start
+VM701:2 foo
+VM701:25 script end
+VM701:18 promise then1
+VM701:7 bar end   （这里是async await后面的微任务 在第一个than后开始执行）
+VM701:8 bar end2 （这里是async await后面的微任务 在第一个than后开始执行）
+VM701:20 promise then2
+VM701:22 promise then3
+VM701:12 setTimeout
+
+
