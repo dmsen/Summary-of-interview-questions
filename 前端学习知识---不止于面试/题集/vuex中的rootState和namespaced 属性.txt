@@ -1,0 +1,86 @@
+虽然dispatch action和 commit mutations 可以全局使用，但是写在module 中的actions, mutations 和getters, 它们获得的默认参数却不是全局的，都是局部的，被限定在它们所在的模块中的。比如mutations和getters 会获得state 作为第一个默认参数，这个state参数，就是限定在mutations 和getters 所在模块的state对象，login 文件夹下的mutations 和getters 只会获取到当前index.js 中的 state 作为参数 。 actions 会获得一个context 对象作为参数，这个context 对象就是当前module 的实例，module 相当于一个小store.
+那么怎样才能获取到根store 中的state 和 getters 呢？ Vuex 提供了 rootState, rootGetters 作为module 中 getters 中默认参数, actions中context 对象，也会多了两个属性,context.getters, context. rootState, 这些全局的默认参数，都排在局部参数的后面。
+例子：
+我们在store.js中添加 state, getters:
+
+export default new Vuex.Store({
+  // 通过modules属性引入login 模块。
+  modules: {
+    login: login
+  },
+ 
+  // 新增state, getters
+  state: {
+    job: "web"
+  },
+  getters: {
+    jobTitle (state){
+      return state.job + "developer"
+    }
+  }
+})
+login 目录下的 index.js
+
+const actions = {
+  // actions 中的context参数对象多了 rootState 参数
+  changeName ({commit, rootState},anotherName) {
+    if(rootState.job =="web") {
+      commit("change_name", anotherName)
+    }
+  }
+};
+ 
+const getters = {
+  // getters 获取到 rootState, rootGetters 作为参数。
+  // rootState和 rootGetter参数顺序不要写反，一定是state在前，getter在后面，这是vuex的默认参数传递顺序， 可以打印出来看一下。
+  localJobTitle (state,getters,rootState,rootGetters) { 
+    console.log(rootState);
+    console.log(rootGetters);
+    return rootGetters.jobTitle + " aka " + rootState.job 
+  }
+};
+
+========
+
+actions, mutations, getters, 也可以限定在当前模块的命名空间中。只要给我们的模块加一个namespaced 属性：
+const state = {
+  useName: "sam"
+};
+const mutations = {
+  change_name (state, anotherName) {
+    state.useName = anotherName;
+  }
+};
+const actions = {
+  changeName ({commit, rootState},anotherName) {
+    if(rootState.job =="web") {
+      commit("change_name", anotherName)
+    }
+  },
+  alertName({state}) {
+    alert(state.useName)
+  }
+};
+const getters = {
+  localJobTitle (state,getters,rootState,rootGetters) { 
+    return rootGetters.jobTitle + " aka " + rootState.job 
+  }
+};
+
+// namespaced 属性，限定命名空间
+export default {
+  namespaced:true,
+  state,
+  mutations,
+  actions,
+  getters
+}
+
+当所有的actions, mutations, getters 都被限定到模块的命名空间下，我们dispatch actions, commit mutations 都需要用到命名空间。如 dispacth("changeName"), 就要变成 dispatch("login/changeName"); getters.localJobTitle 就要变成 getters["login/localJobTitle"]
+
+作者：world_7735
+链接：https://www.jianshu.com/p/a0c11ae01991
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+
