@@ -1,0 +1,22 @@
+WebSocket 协议本质上是一个基于 TCP 的协议
+创建 WebSocket 对象。
+var Socket = new WebSocket(url, [protocol] );
+以上代码中的第一个参数 url, 指定连接的 URL。
+第二个参数 protocol 是可选的，指定了可接受的子协议。
+
+WebSocket 属性
+只读属性 readyState 表示连接状态，可以是以下值：
+0 - 表示连接尚未建立。
+1 - 表示连接已建立，可以进行通信。
+2 - 表示连接正在进行关闭。
+3 - 表示连接已经关闭或者连接不能打开。
+
+WebSocket 事件
+open	Socket.onopen	连接建立时触发
+message	Socket.onmessage	客户端接收服务端数据时触发
+error	Socket.onerror	通信发生错误时触发
+close	Socket.onclose	连接关闭时触发
+
+WebSocket 方法
+Socket.send()	使用连接发送数据
+Socket.close()	关闭连接
